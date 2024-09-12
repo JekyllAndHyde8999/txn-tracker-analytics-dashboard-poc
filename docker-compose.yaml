@@ -11,3 +11,5 @@ services:
     image: "postgres:16.4"
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
