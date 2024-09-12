@@ -6,4 +6,4 @@ COPY ./src .
 
 RUN pip install -r requirements.txt
 
-CMD ["streamlit", "run", "st_integration_test.py", "--server.address=0.0.0.0", "--server.port=8501"]
+CMD ["streamlit", "run", "st_dashboard.py", "--server.address=0.0.0.0", "--server.port=8501"]
