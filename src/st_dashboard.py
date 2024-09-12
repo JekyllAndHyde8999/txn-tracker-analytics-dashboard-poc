@@ -11,7 +11,7 @@ import streamlit as st
 from dateutil import parser as date_parser
 from dotenv import load_dotenv
 from pdf2image import convert_from_path
-from sqlalchemy import MetaData, create_engine, select
+from sqlalchemy import MetaData, create_engine, select, insert
 
 load_dotenv()
 
@@ -58,9 +58,12 @@ st.dataframe(df)
 
 metadata = MetaData()
 metadata.reflect(bind=engine)
-member = metadata.tables["member"]
-query = select(member.c.name, member.c.birthday).order_by(member.c.birthday)
-st.write(query)
+transaction = metadata.tables["transaction"]
 
 with engine.connect() as connect:
-    result = list(connect.execute(query))
+    for i, row in df.iterrows():
+        query = insert(transaction).values(
+            txn_date=row.txn_date, txn_amount=row.amount, txn_desc=row.desc, txn_cc=1
+        )
+        connect.execute(query)
+        connect.commit()

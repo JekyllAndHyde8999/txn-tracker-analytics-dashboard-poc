@@ -17,7 +17,7 @@ CREATE TABLE creditcard (
     CONSTRAINT fk_cc_owner
         FOREIGN KEY (cc_owner) REFERENCES member(id)
             ON DELETE CASCADE
-)
+);
 
 -- transaction table to keep track of transaction from credit cards
 CREATE TABLE transaction (
