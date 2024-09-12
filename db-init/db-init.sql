@@ -16,4 +16,17 @@ CREATE TABLE creditcard (
     cc_owner INT,
     CONSTRAINT fk_cc_owner
         FOREIGN KEY (cc_owner) REFERENCES member(id)
+            ON DELETE CASCADE
 )
+
+-- transaction table to keep track of transaction from credit cards
+CREATE TABLE transaction (
+    id SERIAL PRIMARY KEY,
+    txn_date DATE,
+    txn_amount FLOAT,
+    txn_desc VARCHAR (150),
+    txn_cc INT,
+    CONSTRAINT fk_txn_cc
+        FOREIGN KEY (txn_cc) REFERENCES creditcard(id)
+            ON DELETE CASCADE
+);
