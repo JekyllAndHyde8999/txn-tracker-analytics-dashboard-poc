@@ -11,7 +11,7 @@ import streamlit as st
 from dateutil import parser as date_parser
 from dotenv import load_dotenv
 from pdf2image import convert_from_path
-from sqlalchemy import MetaData, create_engine, select, insert
+from sqlalchemy import MetaData, create_engine, insert, select
 
 load_dotenv()
 
