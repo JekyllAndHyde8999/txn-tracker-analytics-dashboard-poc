@@ -27,6 +27,8 @@ def add_member(name, birthday) -> bool:
             conn.execute(query)
             conn.commit()
         st.success(f"Added '{name}' member")
+        return True
+    return False
 
 
 with st.form("Add Member"):
