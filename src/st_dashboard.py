@@ -13,17 +13,15 @@ from dotenv import load_dotenv
 from pdf2image import convert_from_path
 from sqlalchemy import MetaData, create_engine, insert, select
 
+from db_config import dbconfig
+
 load_dotenv()
 
 st.title("Transaction Tracker")
 
-username = os.getenv("POSTGRES_USERNAME")
-password = os.getenv("POSTGRES_PASSWORD")
-host = os.getenv("POSTGRES_HOST")
-database_name = os.getenv("POSTGRES_DBNAME")
-
-connection_url = f"postgresql+psycopg2://{username}:{password}@{host}/{database_name}"
-engine = create_engine(connection_url)
+engine = dbconfig.get_engine()
+member = dbconfig.get_table("member")
+transaction = dbconfig.get_table("transaction")
 
 tx_file = st.file_uploader("Upload PDF file", type="pdf")
 if not tx_file:
@@ -35,10 +33,6 @@ with TemporaryDirectory() as tempdir:
 
     images = convert_from_path(os.path.join(tempdir, tx_file.name))
     texts = [pytesseract.image_to_string(image=image) for image in images]
-
-    for i, text in enumerate(texts, 1):
-        with open(f"page_{i}.txt", mode="w") as f:
-            f.write(text)
 
 regex = r"^(?P<card_no>\d{4})\s+(?P<txn_date>\d{2}/\d{2})\s+(?P<post_date>\d{2}/\d{2})\s(?P<ref_no>[a-zA-Z0-9]+)\s*(?P<desc>.*?)(?P<txn_amt>\d+\.\d{2})"
 punctuation_remover = str.maketrans("", "", string.punctuation)
@@ -55,10 +49,6 @@ for i, text in enumerate(texts):
         df.loc[df.shape[0], :] = (card_no, txn_date, desc, txn_amt)
 
 st.dataframe(df)
-
-metadata = MetaData()
-metadata.reflect(bind=engine)
-transaction = metadata.tables["transaction"]
 
 with engine.connect() as connect:
     for i, row in df.iterrows():
