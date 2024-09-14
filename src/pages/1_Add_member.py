@@ -1,10 +1,12 @@
 import os
 from datetime import datetime
 
+import pandas as pd
 import streamlit as st
-from db_config import dbconfig
 from dotenv import load_dotenv
-from sqlalchemy import MetaData, create_engine, insert
+from sqlalchemy import MetaData, create_engine, func, insert, select
+
+from db_config import dbconfig
 
 load_dotenv()
 
@@ -38,3 +40,7 @@ with st.form("Add Member"):
 
     if add_member_button:
         add_member(name, birthday)
+
+members = pd.read_sql(select(member.c.name, member.c.birthday), con=engine)
+if members.shape[0]:
+    st.dataframe(members)

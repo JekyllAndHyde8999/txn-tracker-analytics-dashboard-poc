@@ -1,16 +1,17 @@
 import os
 from datetime import datetime
 
+import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
-from sqlalchemy import MetaData, create_engine, insert, select, func
+from sqlalchemy import MetaData, create_engine, func, insert, select
 
 from db_config import dbconfig
 
 load_dotenv()
 
-st.title("Add Member")
-st.write("Add your family's details to the database")
+st.title("Add Credit Card")
+st.write("Add your credit card's details to the database")
 
 member = dbconfig.get_table("member")
 creditcard = dbconfig.get_table("creditcard")
@@ -60,3 +61,17 @@ if all_members:
             add_card(cc_number, cc_provider, cc_owner)
 else:
     st.info("Add family members into database first")
+
+
+query = select(creditcard.c.cc_number, creditcard.c.cc_provider, creditcard.c.cc_owner)
+query = select(member.c.name, creditcard.c.cc_provider).select_from(
+    member.join(creditcard, member.c.id == creditcard.c.cc_owner)
+)
+query = select(member.c.name, creditcard.c.cc_provider.label("provider")).join(
+    member, member.c.id == creditcard.c.cc_owner
+)
+
+st.write(query)
+cards = pd.read_sql(query, con=engine)
+if cards.shape[0]:
+    st.dataframe(cards)
