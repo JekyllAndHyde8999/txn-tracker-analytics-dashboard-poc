@@ -25,6 +25,7 @@ CREATE TABLE transaction (
     txn_date DATE,
     txn_amount FLOAT,
     txn_desc VARCHAR (150),
+    txn_category VARCHAR (50),
     txn_cc INT,
     CONSTRAINT fk_txn_cc
         FOREIGN KEY (txn_cc) REFERENCES creditcard(id)

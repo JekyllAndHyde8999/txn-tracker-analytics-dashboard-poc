@@ -4,3 +4,6 @@ psycopg2
 python-dotenv
 pdf2image
 pytesseract
+langchain
+langchain_cohere
+cohere
