@@ -69,7 +69,7 @@ def insert_into_db(df):
                 txn_date=row.txn_date,
                 txn_amount=row.amount,
                 txn_desc=row.desc,
-                txn_cc=1,
+                txn_cc=2,
                 txn_category=row.category,
             )
             connect.execute(query)

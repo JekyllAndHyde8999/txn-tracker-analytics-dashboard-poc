@@ -35,7 +35,7 @@ def add_member(name, birthday) -> bool:
 
 with st.form("Add Member"):
     name = st.text_input("First Name")
-    birthday = st.date_input("Birthday", value=None, min_value=datetime(1970, 1, 1))
+    birthday = st.date_input("Birthday", value=None, min_value=datetime(1970, 1, 1), format='MM/DD/YYYY')
     add_member_button = st.form_submit_button()
 
     if add_member_button:

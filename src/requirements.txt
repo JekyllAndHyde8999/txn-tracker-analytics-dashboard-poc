@@ -7,3 +7,4 @@ pytesseract
 langchain
 langchain_cohere
 cohere
+plotly
